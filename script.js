@@ -118,6 +118,7 @@ async function apiCall(endpoint, options = {}) {
     }
 }
 
+
 // Get Started Modal
 function showGetStartedModal() {
     const modal = createModal('Get Started', `
@@ -134,6 +135,7 @@ function showGetStartedModal() {
                     <input type="text" id="lastName" name="lastName" required>
                 </div>
                 <div class="form-group">
+
                     <label for="email">Email address</label>
                     <input type="email" id="email" name="email" required>
                 </div>
@@ -149,6 +151,7 @@ function showGetStartedModal() {
                 <div class="form-group">
                     <label for="tax-year">Tax year</label>
                     <select id="tax-year" name="taxYear" required>
+
                         <option value="">Select tax year</option>
                         <option value="2023-24">2023-24</option>
                         <option value="2022-23">2022-23</option>
@@ -157,7 +160,9 @@ function showGetStartedModal() {
                 </div>
                 <div class="form-group">
                     <label for="situation">What describes your situation?</label>
+
                     <select id="situation" name="situationType" required>
+
                         <option value="">Select your situation</option>
                         <option value="self-employed">Self-employed</option>
                         <option value="freelancer">Freelancer/Contractor</option>
@@ -169,12 +174,15 @@ function showGetStartedModal() {
                     </select>
                 </div>
                 <div class="form-actions">
+
                     <button type="submit" class="btn-primary btn-large">Create Account & Continue</button>
+
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
                 </div>
             </form>
         </div>
     `);
+
 
     document.getElementById('get-started-form').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -224,6 +232,7 @@ function showGetStartedModal() {
             submitButton.textContent = originalText;
             submitButton.disabled = false;
         }
+
     });
 }
 
@@ -241,6 +250,7 @@ function showLoginModal() {
                 <div class="form-group">
                     <label for="login-password">Password</label>
                     <input type="password" id="login-password" name="password" required>
+
                 </div>
                 <div class="form-group">
                     <label class="checkbox-label">
@@ -255,6 +265,7 @@ function showLoginModal() {
                 </div>
                 <div class="form-footer">
                     <a href="#forgot-password" onclick="showForgotPasswordModal()">Forgot your password?</a>
+
                 </div>
             </form>
         </div>
@@ -302,6 +313,7 @@ function showLoginModal() {
             submitButton.textContent = originalText;
             submitButton.disabled = false;
         }
+
     });
 }
 
@@ -437,6 +449,7 @@ function showForgotPasswordModal() {
         }
     });
 }
+
 
 // Add animation classes for scroll effects
 const style = document.createElement('style');

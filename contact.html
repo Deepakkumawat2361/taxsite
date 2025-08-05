@@ -284,6 +284,7 @@
 
     <script src="script.js"></script>
     <script>
+
         // API Configuration
         const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -351,6 +352,17 @@
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
             }
+=======
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate form submission
+            showSuccessMessage('Thank you for your message! We\'ll get back to you within 24 hours.');
+            this.reset();
+
         });
 
         // FAQ toggle functionality
