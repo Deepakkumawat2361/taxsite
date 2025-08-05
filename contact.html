@@ -284,15 +284,73 @@
 
     <script src="script.js"></script>
     <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        // API Helper Function
+        async function apiCall(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            };
+
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'API request failed');
+                }
+
+                return data;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
         // Contact form submission
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
             
-            // Simulate form submission
-            showSuccessMessage('Thank you for your message! We\'ll get back to you within 24 hours.');
-            this.reset();
+            try {
+                submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
+
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                // Map form fields to API expected format
+                const contactData = {
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    email: data.email,
+                    phone: data.phone,
+                    subject: data.subject,
+                    message: data.message,
+                    inquiryType: data.subject.toLowerCase().replace(/\s+/g, '-')
+                };
+
+                const response = await apiCall('/contact', {
+                    method: 'POST',
+                    body: JSON.stringify(contactData)
+                });
+
+                showSuccessMessage('Thank you for your message! We\'ll get back to you within 24 hours.');
+                this.reset();
+
+            } catch (error) {
+                showErrorMessage(error.message || 'Failed to send message. Please try again.');
+            } finally {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
         });
 
         // FAQ toggle functionality
