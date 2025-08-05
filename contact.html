@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TaxPro | Get Help with Your Tax Questions</title>
+    <meta name="description" content="Get in touch with TaxPro's support team. We're here to help with your tax questions and concerns. Contact us by phone, email, or live chat.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="index.html"><i class="fas fa-calculator"></i> TaxPro</a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html#services">Tax returns</a></li>
+                    <li><a href="index.html#advice">Tax advice</a></li>
+                    <li><a href="index.html#company">Company taxes</a></li>
+                    <li class="dropdown">
+                        <a href="#resources">Resources <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="#guides">Guides</a>
+                            <a href="#calculators">Tax calculators</a>
+                            <a href="#blog">Blog</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="#login" class="btn-secondary">Log in</a>
+                    <a href="index.html#get-started" class="btn-primary">Get started</a>
+                </div>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Contact Us</h1>
+                <p class="hero-subtitle">We're here to help with any questions about your tax return. Get in touch with our friendly support team.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Methods Section -->
+    <section class="contact-methods">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-grid">
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Live Chat</h3>
+                    <p>Chat with our support team in real-time. Available weekdays 9am-6pm.</p>
+                    <a href="#" class="btn-primary" onclick="showChatModal()">Start Chat</a>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Support</h3>
+                    <p>Send us an email and we'll get back to you within 24 hours.</p>
+                    <a href="mailto:support@taxpro.com" class="btn-secondary">support@taxpro.com</a>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Phone Support</h3>
+                    <p>Call us for urgent matters. Available weekdays 9am-5pm.</p>
+                    <a href="tel:+442012345678" class="btn-secondary">+44 20 1234 5678</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section">
+        <div class="container">
+            <div class="contact-form-content">
+                <div class="form-info">
+                    <h2>Send us a Message</h2>
+                    <p>Have a specific question or need help with something? Fill out the form and we'll get back to you as soon as possible.</p>
+                    <div class="contact-details">
+                        <div class="detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Office Address</h4>
+                                <p>123 Tax Street<br>London, EC1A 1BB<br>United Kingdom</p>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Support Hours</h4>
+                                <p>Monday - Friday: 9am - 6pm<br>Saturday: 10am - 4pm<br>Sunday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contact-form" class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" name="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number (Optional)</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="tax-return">Tax Return Question</option>
+                                <option value="account">Account Support</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="technical">Technical Issue</option>
+                                <option value="feedback">Feedback</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required placeholder="Please describe your question or issue in detail..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary btn-large">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How long does it take to complete my tax return?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most tax returns are completed within 48 hours of submission. Complex returns may take up to 5 business days. You'll receive regular updates on the progress of your return.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What if I need to make changes to my tax return?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can request changes to your tax return before it's filed with HMRC at no additional cost. After filing, we can help you submit amendments if necessary.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Are your accountants qualified?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, all our accountants are fully qualified and accredited by major UK accounting bodies. They have at least 5 years of experience and undergo regular quality audits.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Is my personal information secure?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely. We use bank-level encryption and security measures to protect your data. All our accountants are bound by strict confidentiality agreements.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What if HMRC has questions about my return?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Your assigned accountant will handle any HMRC queries on your behalf. This support is included in our service at no extra cost.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Can I speak directly to my accountant?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, once you're matched with an accountant, you can communicate with them directly through our platform or by email throughout the process.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Still have questions?</h2>
+            <p>Our support team is here to help you every step of the way.</p>
+            <a href="index.html#get-started" class="btn-primary btn-large">Get started today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-calculator"></i> TaxPro
+                    </div>
+                    <p>Making tax returns stress-free for everyone.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Our services</h4>
+                    <ul>
+                        <li><a href="index.html#services">Tax returns</a></li>
+                        <li><a href="index.html#advice">Tax advice</a></li>
+                        <li><a href="index.html#company">Company tax returns</a></li>
+                        <li><a href="#bookkeeping">Bookkeeping</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#press">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#guides">Guides</a></li>
+                        <li><a href="#calculators">Tax calculators</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="contact.html">Contact us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <a href="#privacy">Privacy policy</a>
+                    <a href="#terms">Terms of service</a>
+                    <a href="#cookies">Cookie policy</a>
+                </div>
+                <p>&copy; 2024 TaxPro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate form submission
+            showSuccessMessage('Thank you for your message! We\'ll get back to you within 24 hours.');
+            this.reset();
+        });
+
+        // FAQ toggle functionality
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const icon = element.querySelector('i');
+            
+            faqItem.classList.toggle('active');
+            
+            if (faqItem.classList.contains('active')) {
+                answer.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                answer.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Chat modal functionality
+        function showChatModal() {
+            const modal = createModal('Live Chat', `
+                <div class="modal-content">
+                    <h3>Start a Conversation</h3>
+                    <p>Our support team is here to help. Please provide some basic information to get started.</p>
+                    <form id="chat-form" class="form">
+                        <div class="form-group">
+                            <label for="chat-name">Your Name</label>
+                            <input type="text" id="chat-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="chat-email">Email Address</label>
+                            <input type="email" id="chat-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="chat-topic">What can we help you with?</label>
+                            <select id="chat-topic" name="topic" required>
+                                <option value="">Select a topic</option>
+                                <option value="getting-started">Getting started</option>
+                                <option value="tax-return">Tax return questions</option>
+                                <option value="account">Account issues</option>
+                                <option value="billing">Billing questions</option>
+                                <option value="technical">Technical support</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary btn-large">Start Chat</button>
+                            <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `);
+
+            document.getElementById('chat-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showSuccessMessage('Connecting you to a support agent...');
+                closeModal();
+            });
+        }
+    </script>
+</body>
+</html>
