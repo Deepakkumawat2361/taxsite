@@ -83,6 +83,42 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// API Configuration
+const API_BASE_URL = 'http://localhost:3000/api';
+
+// API Helper Functions
+async function apiCall(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        },
+        ...options
+    };
+
+    // Add auth token if available
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+        const response = await fetch(url, config);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'API request failed');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+}
+
+
 // Get Started Modal
 function showGetStartedModal() {
     const modal = createModal('Get Started', `
@@ -91,6 +127,15 @@ function showGetStartedModal() {
             <p>Ready to get your tax return sorted? Let's begin with a few quick questions.</p>
             <form id="get-started-form" class="form">
                 <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+
                     <label for="email">Email address</label>
                     <input type="email" id="email" name="email" required>
                 </div>
@@ -99,8 +144,14 @@ function showGetStartedModal() {
                     <input type="tel" id="phone" name="phone" required>
                 </div>
                 <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="8">
+                    <small>Must be at least 8 characters with uppercase, lowercase, and number</small>
+                </div>
+                <div class="form-group">
                     <label for="tax-year">Tax year</label>
-                    <select id="tax-year" name="tax-year" required>
+                    <select id="tax-year" name="taxYear" required>
+
                         <option value="">Select tax year</option>
                         <option value="2023-24">2023-24</option>
                         <option value="2022-23">2022-23</option>
@@ -109,7 +160,9 @@ function showGetStartedModal() {
                 </div>
                 <div class="form-group">
                     <label for="situation">What describes your situation?</label>
-                    <select id="situation" name="situation" required>
+
+                    <select id="situation" name="situationType" required>
+
                         <option value="">Select your situation</option>
                         <option value="self-employed">Self-employed</option>
                         <option value="freelancer">Freelancer/Contractor</option>
@@ -121,21 +174,65 @@ function showGetStartedModal() {
                     </select>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary btn-large">Continue</button>
+
+                    <button type="submit" class="btn-primary btn-large">Create Account & Continue</button>
+
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
                 </div>
             </form>
         </div>
     `);
 
-    document.getElementById('get-started-form').addEventListener('submit', function(e) {
+
+    document.getElementById('get-started-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
         
-        // Simulate form submission
-        showSuccessMessage('Thank you! We\'ll be in touch shortly to get your tax return started.');
-        closeModal();
+        try {
+            submitButton.textContent = 'Creating Account...';
+            submitButton.disabled = true;
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Register user
+            const registerResponse = await apiCall('/auth/register', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            // Store auth token
+            localStorage.setItem('authToken', registerResponse.data.token);
+            localStorage.setItem('userData', JSON.stringify(registerResponse.data.user));
+
+            // Create tax return
+            const taxReturnData = {
+                taxYear: data.taxYear,
+                situationType: data.situationType,
+                submissionDeadline: '2024-01-31'
+            };
+
+            await apiCall('/tax-returns', {
+                method: 'POST',
+                body: JSON.stringify(taxReturnData)
+            });
+
+            showSuccessMessage('Account created successfully! Your tax return has been started. Check your email for verification.');
+            closeModal();
+            
+            // Optionally redirect to dashboard
+            setTimeout(() => {
+                window.location.href = '/dashboard.html';
+            }, 2000);
+
+        } catch (error) {
+            showErrorMessage(error.message || 'Failed to create account. Please try again.');
+        } finally {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        }
+
     });
 }
 
@@ -151,8 +248,9 @@ function showLoginModal() {
                     <input type="email" id="login-email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+
                 </div>
                 <div class="form-group">
                     <label class="checkbox-label">
@@ -166,17 +264,56 @@ function showLoginModal() {
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
                 </div>
                 <div class="form-footer">
-                    <a href="#forgot-password">Forgot your password?</a>
+                    <a href="#forgot-password" onclick="showForgotPasswordModal()">Forgot your password?</a>
+
                 </div>
             </form>
         </div>
     `);
 
-    document.getElementById('login-form').addEventListener('submit', function(e) {
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        // Simulate login
-        showSuccessMessage('Login successful! Redirecting to your dashboard...');
-        closeModal();
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        
+        try {
+            submitButton.textContent = 'Logging in...';
+            submitButton.disabled = true;
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            const response = await apiCall('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            // Store auth token and user data
+            localStorage.setItem('authToken', response.data.token);
+            localStorage.setItem('userData', JSON.stringify(response.data.user));
+
+            showSuccessMessage('Login successful! Redirecting to your dashboard...');
+            closeModal();
+            
+            // Redirect based on user role
+            setTimeout(() => {
+                const user = response.data.user;
+                if (user.role === 'admin') {
+                    window.location.href = '/admin-dashboard.html';
+                } else if (user.role === 'accountant') {
+                    window.location.href = '/accountant-dashboard.html';
+                } else {
+                    window.location.href = '/dashboard.html';
+                }
+            }, 1500);
+
+        } catch (error) {
+            showErrorMessage(error.message || 'Login failed. Please check your credentials.');
+        } finally {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        }
+
     });
 }
 
@@ -241,6 +378,78 @@ function showSuccessMessage(message) {
         }
     }, 3000);
 }
+
+function showErrorMessage(message) {
+    const errorHTML = `
+        <div class="error-message" id="error-message">
+            <div class="error-content">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>${message}</p>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', errorHTML);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        const errorMsg = document.getElementById('error-message');
+        if (errorMsg) {
+            errorMsg.remove();
+        }
+    }, 5000);
+}
+
+// Forgot Password Modal
+function showForgotPasswordModal() {
+    closeModal(); // Close any existing modal
+    
+    const modal = createModal('Reset Password', `
+        <div class="modal-content">
+            <h3>Reset Your Password</h3>
+            <p>Enter your email address and we'll send you a link to reset your password.</p>
+            <form id="forgot-password-form" class="form">
+                <div class="form-group">
+                    <label for="forgot-email">Email address</label>
+                    <input type="email" id="forgot-email" name="email" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary btn-large">Send Reset Link</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    `);
+
+    document.getElementById('forgot-password-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        
+        try {
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            await apiCall('/auth/forgot-password', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            showSuccessMessage('Password reset link sent! Check your email for instructions.');
+            closeModal();
+
+        } catch (error) {
+            showErrorMessage(error.message || 'Failed to send reset link. Please try again.');
+        } finally {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        }
+    });
+}
+
 
 // Add animation classes for scroll effects
 const style = document.createElement('style');
